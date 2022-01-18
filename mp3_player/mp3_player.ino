@@ -16,10 +16,9 @@
 //declare some global variables
 
 //Boolean values, true or false
-bool ROM = false; //Is there data in teh EEPROM?
+bool ROM = false; //Is there data in the EEPROM?
 bool changeVolume; //Are we in the midst of changing the volume?
-//The DFPlayer's own status reports are unreliable, so we keep track of the status ourselves
-bool isPlaying = false; //Is music playing?
+bool isPlaying = false; //The DFPlayer's own status reports are unreliable, so we keep track of the status ourselves
 
 //Integers
 int currentVolume; //Set based on a value stored in EEPROM, or defaults to 10
@@ -27,8 +26,7 @@ int volumeDelay = 1000; //the speed in milliseconds at which the volume ramps up
 int EEAddress = 0; //Current address of EEPROM data being accessed or written
 
 //Setup library objects
-//Software Serial on pins 7 (RX) and 8 (TX)
-//leaves pins 9, 10 and 11 free for an RGB LED if desired
+//Software Serial on pins 7 (RX) and 8 (TX) leaves pins 9, 10 and 11 free for an RGB LED if desired
 SoftwareSerial mySerial(7, 8);
 //instantiate the DFPlayer library
 DFPlayerMini_Fast mp3;
@@ -99,6 +97,17 @@ void setup() {
   //let the DFPlayer catch up
   delay(1000);
 
+
+  //check if we're playing, in case the arduino crashed
+  if (mp3.isPlaying()) {
+Serial.println("Music is already playing on startup");
+    isPlaying = true;
+  } else {
+    Serial.println("No music is playing at startup. Playing a random track");
+    isPlaying = true;
+    //play something random at startup
+    mp3.randomAll();
+  } //end if
 } //End setup
 
 void loop() {
