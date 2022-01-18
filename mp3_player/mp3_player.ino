@@ -115,27 +115,34 @@ void loop() {
 // This function will be called when button1 ispressed once
 void click1() {
   Serial.println("Button 1 click.");
-  isPlaying = true;
-  mp3.playNext();
-  delay(100);
+  if (isPlaying) {
+    mp3.playNext();
+    delay(20);
+  } else {
+    mp3.playFolder(1, 1);
+    isPlaying = true;
+  } //end if
 } //end function
 
 // This function will be called when button1 ispressed twice in a short timeframe
 void doubleClick1() {
   Serial.println("Button 1 doubleclick.");
-  isPlaying = true;
-  mp3.playPrevious();
-  delay(100);
+  if (isPlaying) {
+    mp3.playPrevious();
+    delay(20);
+  } else {
+    //do something
+  }
 } //end function
 
-// This function will be called once, when button1 is held for the period set in pressDuration above
+// This function will be called once, when button1 is held
 void longPressStart1() {
   Serial.println("Button 1 longPress start");
   //We're going to change the volume
   changeVolume = true;
 } //end function
 
-// This function will be called often, when button1 is held for the period set in pressDuration above
+// This function will be called often, when button1 is held
 void longPress1() {
   Serial.println("Button 1 longPress...");
   //If we're changing the volume, and the current volume is more than theminimum possible
@@ -162,17 +169,24 @@ void longPressStop1() {
 //The other button functions are as above
 void click2() {
   Serial.println("Button 2 click.");
-  if (!isPlaying) {
-    mp3.resume();
-  } else {
+  if (isPlaying) {
     isPlaying = false;
     mp3.pause();
+  } else {
+    isPlaying = true;
+    mp3.resume();
   } //end if
 } //end function
 
 void doubleClick2() {
   Serial.println("Button 2 doubleclick.");
-  mp3.stop();
+  if (isPlaying) {
+    isPlaying = false;
+    mp3.stop();
+  } else {
+    isPlaying = true;
+    mp3.randomAll();
+  } //end if
 } //end function
 
 void longPressStart2() {
@@ -205,25 +219,31 @@ void longPressStop2() {
 
 void click3() {
   Serial.println("Button 3 click");
-  isPlaying = true;
-  mp3.randomAll();
+  if (isPlaying) {
+    isPlaying = false;
+    mp3.stop();
+   } else {
+    isPlaying = true;
+    mp3.randomAll();
+   } //end if
 } //end function
 
 void doubleClick3() {
   Serial.println("Button 3 doubleClick");
-  isPlaying = false;
-  mp3.stop();
+//do something
 } //end function
 
 void longPressStart3() {
   Serial.println("Button 3 longPress start");
-
+//do something
 } //end function
 
 void longPress3() {
   Serial.println("Button 3 longPress");
+//do something
 } //end function
 
 void longPressStop3() {
   Serial.println("Button 3 longPress stop");
+//do something
 } //end function
